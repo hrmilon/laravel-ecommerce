@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Category;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,6 +20,7 @@ class ProductsFactory extends Factory
     {
         return [
             'category_id' => Category::factory(),
+            'user_id' => User::factory(),
             'name' => fake()->sentence(2),
             'price' => fake()->numberBetween(10, 1000),
             'image' => "https://picsum.photos/150?random=1",

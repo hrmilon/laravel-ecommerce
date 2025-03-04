@@ -2,65 +2,55 @@
 
 namespace App\Policies;
 
+use App\Models\Admin;
+use App\Models\Products;
 use App\Models\User;
-use App\Models\products;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Auth;
+
+use function Illuminate\Log\log;
+use function PHPUnit\Framework\returnSelf;
 
 class ProductsPolicy
 {
     /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
-    {
-        return false;
-    }
-
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, products $products): bool
-    {
-        return false;
-    }
-
-    /**
      * Determine whether the user can create models.
      */
-    public function create(User $user): bool
+    public function create($user, Products $products): bool
     {
+        if (Auth::user()->id) return true;
         return false;
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, products $products): bool
+    public function update($user, products $products): bool
     {
+        if ($user instanceof Admin) {
+            return true;
+        }
+
+        if ($user instanceof User) {
+            return $user->id == $products->user_id;
+        }
+
         return false;
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, products $products): bool
+    public function delete($user, products $products): bool
     {
-        return false;
-    }
+        if ($user instanceof Admin) {
+            return true;
+        }
 
-    /**
-     * Determine whether the user can restore the model.
-     */
-    public function restore(User $user, products $products): bool
-    {
-        return false;
-    }
+        if ($user instanceof User) {
+            return $user->id == $products->user_id;
+        }
 
-    /**
-     * Determine whether the user can permanently delete the model.
-     */
-    public function forceDelete(User $user, products $products): bool
-    {
         return false;
     }
 }

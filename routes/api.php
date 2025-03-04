@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Middleware\AdminAccessedRoute;
 use Illuminate\Http\Request;
@@ -14,6 +15,12 @@ Route::group(['prefix' => 'auth'], function () {
   Route::post('register', [AuthController::class, 'register']);
   Route::post('login', [AuthController::class, 'login']);
   Route::post('logout', [AuthController::class, 'logout']);
+})->middleware('auth');
+
+Route::group(['prefix' => 'customer'], function () {
+  Route::post('register', [CustomerAuthController::class, 'register']);
+  Route::post('login', [CustomerAuthController::class, 'login']);
+  Route::post('logout', [CustomerAuthController::class, 'logout']);
 })->middleware('auth');
 
 Route::group(['prefix' => 'admin'], function () {
