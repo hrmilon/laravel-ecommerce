@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
 
         // Create 2 admins
         Admin::factory(2)->create();
-        // Customer::factory(20)->create();
+        Customer::factory(20)->create();
     }
 }

@@ -6,25 +6,28 @@ use App\Models\Products;
 use App\Http\Requests\StoreproductsRequest;
 use App\Http\Requests\UpdateproductsRequest;
 use App\Http\Resources\ProductsResource;
-use App\Models\Admin;
-use App\Models\User;
-use App\Policies\ProductsPolicy;
 use App\Services\ProductServices;
+use App\Traits\ApiResponses;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Support\Facades\Cache;
 
 class ProductsController extends Controller
 {
     use AuthorizesRequests;
+    use ApiResponses;
     /**
      * Display a listing of the resource.
      */
     public function index(Products $product)
     {
-        $value = Cache::rememberForever('products', function () {
-            return ProductsResource::collection(Products::cursorPaginate(10));
-        });
-        return $value;
+        $approved = Products::where('approved', '=', "1");
+        if (!$approved->exists()) {
+            return response()->json([
+                "message" => "No more products"
+            ]);
+        }
+
+        return ProductsResource::collection(Products::where('approved', '=', "1")->cursorPaginate(10));
     }
 
     /**
@@ -54,7 +57,9 @@ class ProductsController extends Controller
             return new ProductsResource($product);
         }
 
-        return "error";
+        return $this->error([
+            "message" => "Error Occured During Updating"
+        ]);
     }
 
     /**
@@ -69,6 +74,8 @@ class ProductsController extends Controller
             ]);
         }
 
-        return response()->json(["Error occured during Deletion"]);
+        return $this->error([
+            "message" => "Error Occured During Deletion"
+        ]);
     }
 }

@@ -1,28 +1,29 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Models\Customer;
+use App\Models\Admin;
 use App\Traits\ApiResponses;
 use Illuminate\Support\Facades\Auth;
 
-class CustomerAuthController extends Controller
+class AdminAuthController extends Controller
 {
     use ApiResponses;
 
     public function login(LoginRequest $request)
     {
-        if (!Auth::guard('customer')->attempt($request->only('email', 'password'))) {
+        if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
             return $this->error(["Invalid Credentials"]);
         }
 
-        $customer = Customer::firstWhere('email', $request->email);
+        $admin = Admin::firstWhere('email', $request->email);
 
         return $this->ok(
             'authenticated',
             [
-                'token' => $customer->createToken($customer->email)->plainTextToken
+                'token' => $admin->createToken($admin->email)->plainTextToken
             ]
         );
     }

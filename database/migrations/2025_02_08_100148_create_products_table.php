@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('name');
             $table->integer('price');
             $table->string('image')->nullable();
+            $table->string('approved')->default(false);
             $table->timestamps();
         });
     }
