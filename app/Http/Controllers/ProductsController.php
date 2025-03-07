@@ -20,6 +20,8 @@ class ProductsController extends Controller
      */
     public function index(Products $product)
     {
+        // return only approved products
+        
         $approved = Products::where('approved', '=', "1");
         if (!$approved->exists()) {
             return response()->json([

@@ -3,9 +3,8 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Container\Attributes\Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth as FacadesAuth;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class AuthCheck
@@ -17,9 +16,9 @@ class AuthCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (!FacadesAuth::guard('admin')->check()) {
+        if (!Auth::guard('admin')->user()) {
             return response([
-                "message" => "error occurred"
+                "message" => "Adminstration permission is required"
             ], 401);
         }
         return $next($request);

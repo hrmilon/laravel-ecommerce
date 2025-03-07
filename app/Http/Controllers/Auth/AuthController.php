@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     use ApiResponses;
 
-    public function register(Request $request) {}
+public function register(Request $request) {}
 
     public function login(LoginRequest $request)
     {

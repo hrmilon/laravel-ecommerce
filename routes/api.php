@@ -11,10 +11,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::apiResource('products', ProductsController::class)->except('index')->middleware('auth:sanctum');
+
 Route::get('products', [ProductsController::class, 'index']);
 
-Route::group(['prefix' => 'admin'], function () {
-  // Route::apiResource('r', AdminController::class);
+Route::group(['prefix' => 'admin', 'middleware' => AuthCheck::class], function () {
+  Route::apiResource('r', AdminController::class);
   Route::get('pending', [AdminController::class, 'pendingProducts']);
   Route::post('approve/{id}', [AdminController::class, 'approval'])->name('admin.approve');
 });

@@ -17,19 +17,19 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        AdminAccessedRoute::class;
+        // $middleware->use([
         AuthCheck::class;
-
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
-        $exceptions->render(function (AccessDeniedHttpException $e) {
-            return response()->json([
-                "message" => "you are not allowed to perform this task"
-            ], 429);
-        });
-        $exceptions->render(function (NotFoundHttpException $e) {
-            return response()->json([
-                "message" => "The resource has not been found on this server"
-            ], 404);
-        });
+        // $exceptions->render(function (AccessDeniedHttpException $e) {
+        //     return response()->json([
+        //         "message" => "you are not allowed to perform this task"
+        //     ], 429);
+        // });
+        // $exceptions->render(function (NotFoundHttpException $e) {
+        //     return response()->json([
+        //         "message" => "The resource has not been found on this server"
+        //     ], 404);
+        // });
     })->create();
