@@ -15,21 +15,20 @@ class ProductsController extends Controller
 {
     use AuthorizesRequests;
     use ApiResponses;
-    /**
-     * Display a listing of the resource.
-     */
-    public function index(Products $product)
-    {
-        // return only approved products
-        
-        $approved = Products::where('approved', '=', "1");
-        if (!$approved->exists()) {
-            return response()->json([
-                "message" => "No more products"
-            ]);
-        }
 
-        return ProductsResource::collection(Products::where('approved', '=', "1")->cursorPaginate(10));
+    /**
+     * Public.
+     */
+    public function index(Products $products, ProductServices $service)
+    {
+        $results = $service->viewProductsPublic($products);
+        return $results;
+    }
+
+    public function show($id, Products $product, ProductServices $ProductService)
+    {
+        $results = $ProductService->show($product, $id);
+        return $results;
     }
 
     /**
@@ -37,16 +36,10 @@ class ProductsController extends Controller
      */
     public function store(StoreProductsRequest $request, ProductServices $productServices, Products $product)
     {
+        //TODO :: ONLY SELLER CAN ADD PRODUCTS
+        $this->authorize('create', $product);
         $productCreated = $productServices->store($request, $product);
         return new ProductsResource($productCreated);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Products $product)
-    {
-        return new ProductsResource($product);
     }
 
     /**
@@ -54,6 +47,9 @@ class ProductsController extends Controller
      */
     public function update(UpdateProductsRequest $request, Products $product, ProductServices $service)
     {
+
+        //TODO :: ONLY PRODUCTS INSTANTIATOR AND ADMIN CAN UPDATE (DONE)
+
         if ($this->authorize('update', $product)) {;
             $updated = $service->update($request, $product);
             return new ProductsResource($product);
@@ -69,6 +65,10 @@ class ProductsController extends Controller
      */
     public function destroy(products $product)
     {
+
+        //TODO :: ONLY PRODUCTS INSTANTIATOR AND ADMIN CAN DELETE (DONE)
+
+
         if ($this->authorize('update', $product)) {;
             $product->delete();
             return response()->json([

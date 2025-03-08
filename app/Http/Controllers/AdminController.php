@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductsResource;
 use App\Models\Admin;
 use App\Models\Products;
+use App\Services\ProductServices;
 use Illuminate\Container\Attributes\DB;
 use Illuminate\Http\Request;
 
@@ -13,9 +14,10 @@ class AdminController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Products $products, ProductServices $productService)
     {
-        //
+        $allProducts = $productService->getAllProductsAdmin($products);
+        return $allProducts;
     }
 
     /**

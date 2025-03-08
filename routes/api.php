@@ -4,21 +4,32 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\CustomerAuthController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProductsController;
 use App\Http\Middleware\AuthCheck;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::apiResource('products', ProductsController::class)->except('index')->middleware('auth:sanctum');
+//products creation and modification(admin, seller)
+Route::apiResource('products', ProductsController::class)->except(['index', 'show'])->middleware('auth:sanctum');
 
+//guest accessed routes
 Route::get('products', [ProductsController::class, 'index']);
+Route::get('products/{id}', [ProductsController::class, 'show']);
 
+//admin accessed routes
 Route::group(['prefix' => 'admin', 'middleware' => AuthCheck::class], function () {
-  Route::apiResource('r', AdminController::class);
+  Route::apiResource('products', AdminController::class);
   Route::get('pending', [AdminController::class, 'pendingProducts']);
   Route::post('approve/{id}', [AdminController::class, 'approval'])->name('admin.approve');
 });
+
+//TODO: SELLER accessed route -PENDING(OWN),CHECK PLACED ORDER(OWN)
+
+
+//TODO: customer accessed route -CART,WISHLIST,PLACED ORDER
+
 
 //authentication for seller(User), Customer, Admin
 Route::group(['prefix' => 'auth'], function () {

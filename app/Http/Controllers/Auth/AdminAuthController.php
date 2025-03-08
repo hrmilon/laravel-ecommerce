@@ -7,6 +7,7 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Models\Admin;
 use App\Traits\ApiResponses;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
@@ -14,9 +15,12 @@ class AdminAuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        if (!Auth::guard('admin')->attempt($request->only('email', 'password'))) {
-            return $this->error(["Invalid Credentials"]);
+        $admin = Admin::where('email', $request->email)->first();
+
+        if (!$admin || !Hash::check($request->password, $admin->password)) {
+            return $this->error(['Invalid Credentials'], 401);
         }
+
 
         $admin = Admin::firstWhere('email', $request->email);
 
