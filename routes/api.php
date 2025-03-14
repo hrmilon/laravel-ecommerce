@@ -29,6 +29,3 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('logout', [AdminAuthController::class, 'logout']);
 });
 
-Route::get('hello', function () {
-  return "Yep";
-})->middleware(AdminAccessedRoute::class);;
