@@ -1,14 +1,16 @@
-### This is the scaffolding of
-So far 
-- implemented 3 different guard 
-  - User(Seller), Customer, Admin
-  - Now they act according their guard
-  - eg: only admin can approve products
+### E commerce backend laravel - api based
 
-- implemented Products Controller (Full)
-- Admin approval added
+Frontend : [Ecommerce Frontend](https://github.com/hrmilon/ecommerce-vue)
 
+ Features:
+ - admin approval system for product
+ - admin can delete products if required
+ - seller can create, update and delete their own products
+ - customer only view the product
 
-### Next Repo 
-- each controller should have their own responsibiliy
-(will be implemented)
+Working
+- customer cart 
+- order placement
+
+### Instruction
+- explore config/app.config for guards
