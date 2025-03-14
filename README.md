@@ -7,8 +7,3 @@ So far
 
 - implemented Products Controller (Full)
 - Admin approval added
-
-
-### Next Repo 
-- each controller should have their own responsibiliy
-(will be implemented)
