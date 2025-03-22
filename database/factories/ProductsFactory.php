@@ -18,12 +18,13 @@ class ProductsFactory extends Factory
      */
     public function definition(): array
     {
+        $random = rand(1,15);
         return [
             'category_id' => Category::factory(),
             'user_id' => User::factory(),
             'name' => fake()->sentence(2),
             'price' => fake()->numberBetween(10, 1000),
-            'image' => "https://picsum.photos/150?random=1",
+            'image' => "https://picsum.photos/150?random=". $random,
         ];
     }
 }
